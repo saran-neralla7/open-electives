@@ -112,7 +112,7 @@
     let userEmail = "";
     const msg = document.getElementById("msg");
 
-    fetch("https://script.google.com/a/macros/gvpcdpgc.edu.in/s/AKfycbwRCcX5Q1iMsn5e9FPoW39QnrsVMI37soidIjGNun4jlx80pjDnh6mnNTJ57rKBR-Vj/exec?getEmail=true")
+    fetch("https://script.google.com/a/macros/gvpcdpgc.edu.in/s/AKfycbysmUOMEA0-PIsWaGgy4Y_POWZXhwzRyVm1MYzfFPWicynSMg2IeOs20TBw5j7bdL7Q/exec?getEmail=true")
       .then(res => res.json())
       .then(data => {
         if (!data.email.endsWith("@gvpcdpgc.edu.in")) {
@@ -136,7 +136,7 @@
         return;
       }
 
-      const res = await fetch("https://script.google.com/a/macros/gvpcdpgc.edu.in/s/AKfycbwRCcX5Q1iMsn5e9FPoW39QnrsVMI37soidIjGNun4jlx80pjDnh6mnNTJ57rKBR-Vj/exec?getEmail=true", {
+      const res = await fetch("https://script.google.com/a/macros/gvpcdpgc.edu.in/s/AKfycbysmUOMEA0-PIsWaGgy4Y_POWZXhwzRyVm1MYzfFPWicynSMg2IeOs20TBw5j7bdL7Q/exec?getEmail=true", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({email: userEmail, name, regno, preference1: p1, preference2: p2, preference3: p3})
