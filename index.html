@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Open Elective Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #2196f3, #21cbf3);
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      color: #333;
+    }
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .header h1 {
+      margin: 0;
+      color: #2196f3;
+    }
+    .header p {
+      margin: 0;
+      color: #555;
+    }
+    label {
+      margin-top: 1rem;
+      display: block;
+      font-weight: 600;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      font-size: 1rem;
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .msg {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Gayatri Vidya Parishad College for Degree and PG Courses(A)</h1>
+      <p>Rushikonda, Visakhapatnam - 530045</p>
+    </div>
+    <form id="electiveForm">
+      <label>Student Name</label>
+      <input type="text" id="name" required>
+
+      <label>Register Number</label>
+      <input type="text" id="regno" required>
+
+      <label>Preference 1</label>
+      <select id="p1" required>
+        <option value="">--Select--</option>
+        <option>Subject A</option>
+        <option>Subject B</option>
+        <option>Subject C</option>
+      </select>
+
+      <label>Preference 2</label>
+      <select id="p2" required>
+        <option value="">--Select--</option>
+        <option>Subject A</option>
+        <option>Subject B</option>
+        <option>Subject C</option>
+      </select>
+
+      <label>Preference 3</label>
+      <select id="p3" required>
+        <option value="">--Select--</option>
+        <option>Subject A</option>
+        <option>Subject B</option>
+        <option>Subject C</option>
+      </select>
+
+      <button type="submit">Submit</button>
+      <div class="msg" id="msg"></div>
+    </form>
+  </div>
+
+  <script>
+    let userEmail = "";
+    const msg = document.getElementById("msg");
+
+    fetch("https://script.google.com/a/macros/gvpcdpgc.edu.in/s/AKfycbwRCcX5Q1iMsn5e9FPoW39QnrsVMI37soidIjGNun4jlx80pjDnh6mnNTJ57rKBR-Vj/exec?getEmail=true")
+      .then(res => res.json())
+      .then(data => {
+        if (!data.email.endsWith("@gvpcdpgc.edu.in")) {
+          document.body.innerHTML = "<h2 style='color:white;text-align:center;'>Access denied. Use your college email ID.</h2>";
+        } else {
+          userEmail = data.email;
+        }
+      });
+
+    document.getElementById("electiveForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const regno = document.getElementById("regno").value;
+      const p1 = document.getElementById("p1").value;
+      const p2 = document.getElementById("p2").value;
+      const p3 = document.getElementById("p3").value;
+
+      if (new Set([p1, p2, p3]).size !== 3) {
+        msg.innerHTML = "<span class='error'>All preferences must be different.</span>";
+        return;
+      }
+
+      const res = await fetch("https://script.google.com/a/macros/gvpcdpgc.edu.in/s/AKfycbwRCcX5Q1iMsn5e9FPoW39QnrsVMI37soidIjGNun4jlx80pjDnh6mnNTJ57rKBR-Vj/exec?getEmail=true", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({email: userEmail, name, regno, preference1: p1, preference2: p2, preference3: p3})
+      });
+
+      const result = await res.json();
+      msg.innerHTML = `<span class="${result.status}">${result.message}</span>`;
+      if (result.status === "success") {
+        document.getElementById("electiveForm").reset();
+      }
+    });
+  </script>
+</body>
+</html>
